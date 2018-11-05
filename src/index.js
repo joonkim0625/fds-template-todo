@@ -96,6 +96,7 @@ async function drawTodoList() {
   const todoListEl = fragment.querySelector(".todo-list");
   const todoFormEl = fragment.querySelector('.todo-form')
 
+
   // 할 일 목록 하나 그릴 때 그 위에다가 폼 하나를 그리면 되기 때문에 따로 템플릿을 만들어줄 이유가 없다.
   todoFormEl.addEventListener('submit', async e => {
     e.preventDefault()
@@ -109,19 +110,45 @@ async function drawTodoList() {
     }
   })
 
+
+
+
+
+
   list.forEach(todoItem => {
     // 역시 이 안에서도 1.템플릿 복사, 2.내용 채운 뒤 이벤트 리스너 등록, 3.문서 내부에 삽입의 과정을 똑같이 실행
     // 1.
     const fragment = document.importNode(templates.todoItem, true);
+
+
     // 2.
     const bodyEl = fragment.querySelector(".body");
     bodyEl.textContent = todoItem.body;
+
+    // 삭제 -------
+    const deleteButtonEl = fragment.querySelector(".delete-button");
+    deleteButtonEl.addEventListener('click', async e => {
+      const body = todoItem.body
+      const complete = todoItem.complete
+      await api.delete('/todos/' + todoItem.id, {
+        body,
+        complete
+      })
+
+      drawTodoList()
+    })
+    // ------
     // 3.
     todoListEl.appendChild(fragment);
+    //
+
   });
+
   // 3. 문서 내부에 삽입
   rootEl.textContent = ""; // 비우고 나서 추가를 시켜주면
   rootEl.appendChild(fragment);
+
+
 }
 
 drawLoginForm()
