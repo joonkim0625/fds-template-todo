@@ -53,47 +53,60 @@ function drawLoginForm() {
     })
     localStorage.setItem('token', res.data.token)
     // 임시 테스트 코드 : 할 일을 추가한 적이 없으니까 빈 배열이 나와야 한다.
-    const res2 = await api.get('/todos')
-    alert(JSON.stringify(res2.data))
+    // const res2 = await api.get('/todos')
+    // alert(JSON.stringify(res2.data))
+
+    // 로그인이 정상적으로 되었다면 drawTodoList()를 그려주면 된다.
+    drawTodoList()
+
   })
   // 3. 문서 내부에 삽입하기
+
   rootEl.appendChild(fragment)
 
 }
 
 // 할 일 목록을 그리는 함수
 async function drawTodoList() {
-  const list = [
-    {
-      id: 1,
-      userId: 2,
-      body: 'React 공부',
-      complete: false
-    },
-    {
-      id: 2,
-      userId: 2,
-      body: 'React Router 공부',
-      complete: false
-    }
-  ]
+  // 서버의 할일 목록 불러오기
+
+  const res = await api.get("/todos");
+  const list = res.data;
+
+  // 연습 ------------------
+  // const list = [
+  //   {
+  //     id: 1,
+  //     userId: 2,
+  //     body: 'React 공부',
+  //     complete: false
+  //   },
+  //   {
+  //     id: 2,
+  //     userId: 2,
+  //     body: 'React Router 공부',
+  //     complete: false
+  //   }
+  // ]
+  // ----------------------
   // 역시 여기서도 같은 순서로
   // 1. 템플릿 복사
-  const fragment = document.importNode(templates.todoList, true)
+  const fragment = document.importNode(templates.todoList, true);
   // 2. 내용 채우고 이벤트 리스너 등록
-  const todoListEl = fragment.querySelector('.todo-list')
+  const todoListEl = fragment.querySelector(".todo-list");
   list.forEach(todoItem => {
     // 역시 이 안에서도 1.템플릿 복사, 2.내용 채운 뒤 이벤트 리스너 등록, 3.문서 내부에 삽입의 과정을 똑같이 실행
     // 1.
-    const fragment = document.importNode(templates.todoItem, true)
+    const fragment = document.importNode(templates.todoItem, true);
     // 2.
-    const bodyEl = fragment.querySelector('.body')
-    bodyEl.textContent = todoItem.body
+    const bodyEl = fragment.querySelector(".body");
+    bodyEl.textContent = todoItem.body;
     // 3.
-    todoListEl.appendChild(fragment)
-  })
+    todoListEl.appendChild(fragment);
+  });
   // 3. 문서 내부에 삽입
-  rootEl.appendChild(fragment)
+  rootEl.textContent = ""; // 비우고 나서 추가를 시켜주면
+  rootEl.appendChild(fragment);
 }
 
-drawTodoList()
+drawLoginForm()
