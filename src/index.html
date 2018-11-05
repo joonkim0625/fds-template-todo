@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,24 @@
   <title>중간 프로젝트 템플릿</title>
   <link rel="stylesheet" href="./index.scss">
 </head>
+
 <body>
-  <h1>중간 프로젝트 템플릿</h1>
-  
-  
+  <template id="login-form">
+    <form class="login-form">
+      <input type="text" name="username">
+      <input type="password" name="password">
+      <button>로그인</button>
+    </form>
+  </template>
+
+  <!-- 템플릿을 넣고싶은 div 클래스 이름에는 root를 사용하는 것이 관례. -->
+  <div class="root"></div>
+
+
+
+
+
   <script src="./index.js"></script>
 </body>
+
 </html>

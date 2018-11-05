@@ -1,5 +1,28 @@
 import "@babel/polyfill"; // 이 라인을 지우지 말아주세요!
 
-document.querySelector('h1').addEventListener('click', async e => {
-  alert('Hello World!');
-});
+const templates = {
+  loginForm: document.querySelector('#login-form').content
+}
+
+const rootEl = document.querySelector('.root')
+
+
+
+
+// 이 함수를 선언하면 로그인폼을 그리도록 하는 함수
+function drawLoginForm() {
+  // 1. 템플릿 복사하기
+  const fragment = document.importNode(templates.loginForm, true)
+  // 2. 내용 채우고, 이벤트 리스너 등록하기
+  const loginFormEl = fragment.querySelector('.login-form')
+  // 로그인 과정에서 통신을 할 것이니 async를 사용
+  loginFormEl.addEventListener('submit', async e => {
+    alert('로그인 요청 전송')
+    e.preventDefault()
+  })
+  // 3. 문서 내부에 삽입하기
+  rootEl.appendChild(fragment)
+
+}
+
+drawLoginForm()
