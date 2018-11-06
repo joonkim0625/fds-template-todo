@@ -110,11 +110,6 @@ async function drawTodoList() {
     }
   })
 
-
-
-
-
-
   list.forEach(todoItem => {
     // 역시 이 안에서도 1.템플릿 복사, 2.내용 채운 뒤 이벤트 리스너 등록, 3.문서 내부에 삽입의 과정을 똑같이 실행
     // 1.
@@ -124,17 +119,25 @@ async function drawTodoList() {
     // 2.
     const bodyEl = fragment.querySelector(".body");
     bodyEl.textContent = todoItem.body;
-
     // 삭제 -------
     const deleteButtonEl = fragment.querySelector(".delete-button");
     deleteButtonEl.addEventListener('click', async e => {
-      const body = todoItem.body
-      const complete = todoItem.complete
-      await api.delete('/todos/' + todoItem.id, {
-        body,
-        complete
-      })
+      // 삭제 요청 보내기
+      // 성공 시 할 일 목록 다시 그리기
 
+      await api.delete('/todos/' + todoItem.id)
+
+      drawTodoList()
+    })
+    // ------
+    // 체크박스 ------
+    const checkboxEl = fragment.querySelector('.checkbox')
+
+    checkboxEl.addEventListener('submit', async e => {
+
+      e.preventDefault()
+      checkboxEl.setAttribute('checked', '')
+      await api.post('/todos/' + todoItem.complete , true)
       drawTodoList()
     })
     // ------
@@ -151,4 +154,12 @@ async function drawTodoList() {
 
 }
 
-drawLoginForm()
+// 만약 로그인을 한 상태라면 바로 할 일 목록을 보여주고 (localStorage에서 저장되지 않은 값을 받아오려고 하면 falsy인 null이 반환된다)
+if (localStorage.getItem('token')) {
+  drawTodoList()
+} else {
+
+  // 아니라면 로그인 폼을 보여준다.
+  drawLoginForm()
+
+}
