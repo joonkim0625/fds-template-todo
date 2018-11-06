@@ -127,6 +127,12 @@ async function drawTodoList() {
     // 1.
     const fragment = document.importNode(templates.todoItem, true);
 
+    // const completeEl = fragment.querySelector(".complete");
+    // 여기서 체크박스에 대한 상황처리를 선언해주자.
+    // 만약 컴플리트가 트루라면 : 당연히 completeEl이 선언된 뒤에 작성되어야 한다!!
+    // if (todoItem.complete) {
+    //   completeEl.setAttribute('checked', '')
+    // }
 
     // 2.
     const bodyEl = fragment.querySelector(".body");
@@ -143,16 +149,24 @@ async function drawTodoList() {
     })
     // ------
     // 체크박스 ------
-    const checkboxEl = fragment.querySelector('.checkbox')
-
-    checkboxEl.addEventListener('submit', async e => {
-
+    const completeEl = fragment.querySelector('.complete')
+    if (todoItem.complete) {
+      completeEl.setAttribute('checked', '')
+    }
+    completeEl.addEventListener('click', async e => {
+      // 정보 유일원천 원리를 지키기 위해 브라우저의 내장되어 있는 체크되기 기능을 막는다.
       e.preventDefault()
-      checkboxEl.setAttribute('checked', '')
-      await api.post('/todos/' + todoItem.complete , true)
+      // !todoItem.complete -> 이 뜻은 true면 fasle이고, false이면 true를 반환하라는 뜻.
+      await api.patch('/todos/' + todoItem.id, {
+        complete: !todoItem.complete
+      })
       drawTodoList()
+
     })
+
     // ------
+
+
     // 3.
     todoListEl.appendChild(fragment);
     //
