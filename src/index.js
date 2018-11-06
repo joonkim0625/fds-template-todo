@@ -61,7 +61,7 @@ function drawLoginForm() {
 
   })
   // 3. 문서 내부에 삽입하기
-
+  rootEl.textContent = ''
   rootEl.appendChild(fragment)
 
 }
@@ -108,6 +108,18 @@ async function drawTodoList() {
     if (res.status === 201) {
       drawTodoList()
     }
+  })
+
+  // 로그아웃
+  const logoutEl = fragment.querySelector('.logout')
+  logoutEl.addEventListener('click', e => {
+    // async가 필요없는 이유는 비동기적인 코드 작성이 아니기 때문.
+    // 로그아웃 절차
+    // 1. 토큰 삭제
+    localStorage.removeItem('token')
+    // 2. 로그인 폼 보여주기
+    drawLoginForm()
+
   })
 
   list.forEach(todoItem => {
